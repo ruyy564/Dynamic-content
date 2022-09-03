@@ -1,13 +1,14 @@
 import Label from './Label';
 import Button from './Button';
 import Panel from './Panel';
+import { BUTTON, LABEL, PANEL } from '../helpers/constants';
 
 const Recursive = ({ list }) => {
   return (
     <>
       {list?.map((item) => {
         switch (item.type) {
-          case 'panel':
+          case PANEL:
             if (Array.isArray(item?.content)) {
               return (
                 <Panel props={item.props}>
@@ -16,9 +17,9 @@ const Recursive = ({ list }) => {
               );
             }
             return <Panel props={item.props} />;
-          case 'label':
+          case LABEL:
             return <Label props={item.props} />;
-          case 'button':
+          case BUTTON:
             return <Button props={item.props} />;
           default:
             return <></>;

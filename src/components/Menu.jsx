@@ -1,50 +1,11 @@
-import { useState } from 'react';
 import Input from './Input';
-import useActions from '../hooks/useActions';
-import {
-  normalizeValue,
-  validatePath,
-  isObject,
-  normalizeObj,
-  isString,
-} from '../helpers/object';
+import useData from '../hooks/useData';
 
 const Menu = () => {
-  const [data, setDate] = useState({ path: '', value: '' });
-  const { addValue, addValueError } = useActions();
-
-  const changeHandler = (event) => {
-    setDate((prev) => ({
-      ...prev,
-      [event.target.name]: event.target.value,
-    }));
-  };
-
-  const onClickHandler = () => {
-    let value = normalizeValue(data.value);
-
-    if (!validatePath(data.path)) {
-      addValueError('Ошибка:Введены некорректные данные');
-
-      return;
-    }
-
-    if (isObject(value)) {
-      value = normalizeObj(value);
-      console.log(value);
-    } else if (isString(value)) {
-      addValue({ path: data.path, value });
-
-      return;
-    }
-
-    try {
-      value = JSON.parse(value);
-      addValue({ path: data.path, value });
-    } catch (e) {
-      addValueError('Ошибка:Введены некорректные данные');
-    }
-  };
+  const { data, changeHandler, changeContent } = useData({
+    path: '',
+    value: '',
+  });
 
   return (
     <div className="menu">
@@ -52,15 +13,15 @@ const Menu = () => {
         name={'path'}
         value={data.path}
         onChange={changeHandler}
-        label={'Новое значение'}
+        label={'Путь'}
       />
       <Input
         name={'value'}
         value={data.value}
         onChange={changeHandler}
-        label={'Путь'}
+        label={'Новое значение'}
       />
-      <button className="button-accept" onClick={onClickHandler}>
+      <button className="button-accept" onClick={changeContent}>
         Применить
       </button>
     </div>
